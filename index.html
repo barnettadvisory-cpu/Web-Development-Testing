@@ -483,6 +483,94 @@ footer a { color: var(--pink); text-decoration: none; }
   .contact-box { padding: 36px 24px; }
   .contact-phone { font-size: 2rem; }
 }
+
+/* ─── CREDENTIAL LOGOS (trust bar) ─── */
+.trust-logo-pill {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 5px 14px;
+}
+.trust-logo-pill img { height: 28px; object-fit: contain; }
+
+/* ─── CREDENTIAL BAR (above footer) ─── */
+.cred-bar {
+  background: var(--white);
+  padding: 32px 48px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 48px; flex-wrap: wrap;
+  border-top: 1px solid var(--blush-md);
+}
+.cred-bar img { height: 52px; object-fit: contain; }
+
+/* ─── APPLICATION FORM ─── */
+#apply { background: var(--blush); }
+.apply-intro { max-width: 640px; margin: 0 auto 48px; text-align: center; }
+.apply-form {
+  max-width: 860px; margin: 0 auto;
+  background: white; border-radius: 24px;
+  padding: 52px 52px; box-shadow: 0 16px 48px rgba(26,39,68,.08);
+}
+.apply-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.apply-grid .full { grid-column: 1 / -1; }
+.apply-field { display: flex; flex-direction: column; gap: 6px; }
+.apply-field label {
+  font-size: .75rem; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--navy);
+}
+.apply-sublabel { font-size: .72rem; color: var(--mid); margin-top: -3px; }
+.apply-field input,
+.apply-field select,
+.apply-field textarea {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid var(--blush-md); border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-size: .93rem;
+  color: var(--navy); background: var(--off);
+  transition: border-color .2s, background .2s;
+}
+.apply-field input:focus,
+.apply-field select:focus,
+.apply-field textarea:focus {
+  outline: none; border-color: var(--red); background: white;
+}
+.apply-field textarea { min-height: 110px; resize: vertical; }
+.apply-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+.apply-row label { display: flex; align-items: center; gap: 6px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+.apply-row input[type="radio"] { accent-color: var(--red); width: 15px; height: 15px; }
+.apply-divider {
+  grid-column: 1 / -1; border: none;
+  border-top: 1px solid var(--blush-md); margin: 8px 0;
+}
+.apply-section-title {
+  grid-column: 1 / -1;
+  font-size: .7rem; font-weight: 800; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--red); margin-bottom: -8px;
+}
+.apply-submit-wrap { grid-column: 1 / -1; text-align: center; margin-top: 12px; }
+.apply-submit {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: white; border: none;
+  padding: 15px 44px; border-radius: 100px;
+  font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: background .2s, transform .15s;
+}
+.apply-submit:hover { background: #a82215; transform: translateY(-2px); }
+.apply-note { font-size: .75rem; color: var(--mid); margin-top: 12px; }
+
+@media(max-width:768px) {
+  .apply-form { padding: 32px 24px; }
+  .apply-grid { grid-template-columns: 1fr; }
+  .apply-grid .full { grid-column: 1; }
+  .apply-section-title { grid-column: 1; }
+  .apply-divider { grid-column: 1; }
+  .apply-submit-wrap { grid-column: 1; }
+  .cred-bar { padding: 24px; gap: 28px; }
+  .cred-bar img { height: 38px; }
+}
 </style>
 </head>
 <body>
@@ -540,9 +628,9 @@ footer a { color: var(--pink); text-decoration: none; }
 <div class="trust-bar">
   <div class="trust-item"><div class="chk">&#10003;</div> Ohio Medicaid Waiver Accepted</div>
   <div class="trust-item"><div class="chk">&#10003;</div> Private Pay Accepted</div>
-  <div class="trust-item"><div class="chk">&#10003;</div> CHAP Accredited Agency</div>
-  <div class="trust-item"><div class="chk">&#10003;</div> MBE &amp; WBE Certified</div>
-  <div class="trust-item"><div class="chk">&#10003;</div> Truly Trustworthy Nursing Services</div>
+  <div class="trust-item trust-logo-pill"><img src="logo-chap.png" alt="CHAP Accredited Agency"></div>
+  <div class="trust-item trust-logo-pill"><img src="logo-mbe.png" alt="Ohio Certified MBE – Minority Business Enterprise"></div>
+  <div class="trust-item trust-logo-pill"><img src="logo-wbe.png" alt="Ohio Certified WBE – Women-Owned Business Enterprise"></div>
 </div>
 
 <!-- FOUNDER -->
@@ -748,7 +836,7 @@ footer a { color: var(--pink); text-decoration: none; }
           <li>Ongoing training &amp; development</li>
           <li>Make a real difference every day</li>
         </ul>
-        <a href="mailto:Trulypediatrichhc@gmail.com?subject=Employment Inquiry" class="btn-white">Apply Now &#8599;</a>
+        <a href="#apply" class="btn-white">Apply Now &#8599;</a>
       </div>
     </div>
     <div class="reveal">
@@ -782,6 +870,127 @@ footer a { color: var(--pink); text-decoration: none; }
     <div><span class="accept-pill">&#9829; Ohio Medicaid Waiver &amp; Private Pay Accepted</span></div>
   </div>
 </section>
+
+<!-- APPLICATION FORM -->
+<!--
+  FORM SETUP: This form uses Formspree to deliver submissions to barnettadvisory@gmail.com.
+  To activate:
+  1. Go to https://formspree.io and create a free account.
+  2. Create a new form and set the notification email to barnettadvisory@gmail.com.
+  3. Replace "YOUR_FORM_ID" in the action URL below with your Formspree form ID.
+-->
+<section id="apply">
+  <div class="apply-intro reveal">
+    <p class="section-label">Join Our Team</p>
+    <h2>Apply to <em>work with us</em></h2>
+    <p style="font-size:.97rem;line-height:1.8;color:var(--mid);">
+      We're actively hiring Registered Nurses, Licensed Practical Nurses, and Home Health Aides across Ohio.
+      Fill out the form below and our team will be in touch.
+    </p>
+  </div>
+
+  <div class="apply-form reveal">
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="apply-grid">
+
+        <!-- Position -->
+        <div class="apply-field full">
+          <label for="position">Position Applied For</label>
+          <select id="position" name="position" required>
+            <option value="" disabled selected>Select a position&hellip;</option>
+            <option value="Registered Nurse (RN)">Registered Nurse (RN)</option>
+            <option value="Licensed Practical Nurse (LPN)">Licensed Practical Nurse (LPN)</option>
+            <option value="Home Health Aide (HHA)">Home Health Aide (HHA)</option>
+          </select>
+        </div>
+
+        <!-- Name -->
+        <div class="apply-field">
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" name="first_name" placeholder="Jane" required>
+        </div>
+        <div class="apply-field">
+          <label for="last_name">Last Name</label>
+          <input type="text" id="last_name" name="last_name" placeholder="Smith" required>
+        </div>
+
+        <!-- Contact -->
+        <div class="apply-field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+        </div>
+        <div class="apply-field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" required>
+        </div>
+
+        <!-- Location & Commute -->
+        <div class="apply-field">
+          <label for="location">Location (City, State)</label>
+          <input type="text" id="location" name="location" placeholder="Dayton, OH" required>
+        </div>
+        <div class="apply-field">
+          <label for="commute">Distance Willing to Commute</label>
+          <select id="commute" name="commute" required>
+            <option value="" disabled selected>Select distance&hellip;</option>
+            <option value="Up to 10 miles">Up to 10 miles</option>
+            <option value="Up to 25 miles">Up to 25 miles</option>
+            <option value="Up to 50 miles">Up to 50 miles</option>
+            <option value="50+ miles / statewide">50+ miles / statewide</option>
+          </select>
+        </div>
+
+        <!-- Availability & Pay -->
+        <div class="apply-field">
+          <label>Availability</label>
+          <div class="apply-row">
+            <label><input type="radio" name="availability" value="Full Time" required> Full Time</label>
+            <label><input type="radio" name="availability" value="Part Time"> Part Time</label>
+            <label><input type="radio" name="availability" value="Either"> Either</label>
+          </div>
+        </div>
+        <div class="apply-field">
+          <label for="pay_rate">Desired Pay Rate</label>
+          <input type="text" id="pay_rate" name="pay_rate" placeholder="e.g. $22/hr or open to discussion">
+        </div>
+
+        <hr class="apply-divider">
+        <p class="apply-section-title">Employment History</p>
+
+        <!-- Employment History -->
+        <div class="apply-field full">
+          <label for="employment">Most Recent Employer(s)</label>
+          <p class="apply-sublabel">Include employer name, job title, dates, and a brief description of duties.</p>
+          <textarea id="employment" name="employment_history" placeholder="Example:&#10;Dayton Children's Hospital | Staff RN | 2020–2024&#10;Provided bedside care for pediatric patients in the PICU..."></textarea>
+        </div>
+
+        <hr class="apply-divider">
+        <p class="apply-section-title">Education</p>
+
+        <!-- Education -->
+        <div class="apply-field full">
+          <label for="education">Education &amp; Certifications</label>
+          <p class="apply-sublabel">Include degree, institution, graduation year, and any relevant licenses or certifications.</p>
+          <textarea id="education" name="education" placeholder="Example:&#10;BSN – Wright State University, 2019&#10;Ohio RN License #XXXXXXX (active)&#10;BLS/CPR Certified"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="apply-submit-wrap">
+          <button type="submit" class="apply-submit">Submit Application &#8599;</button>
+          <p class="apply-note">Your information is kept confidential and used only for hiring purposes.</p>
+        </div>
+
+      </div><!-- /.apply-grid -->
+    </form>
+  </div><!-- /.apply-form -->
+</section>
+
+<!-- CREDENTIAL BAR -->
+<div class="cred-bar">
+  <img src="logo-chap.png" alt="CHAP Accredited Agency – Community Health Accreditation Partner">
+  <img src="logo-mbe.png" alt="Ohio Certified MBE – Minority Business Enterprise">
+  <img src="logo-wbe.png" alt="Ohio Certified WBE – Women-Owned Business Enterprise">
+</div>
 
 <!-- FOOTER -->
 <footer>
