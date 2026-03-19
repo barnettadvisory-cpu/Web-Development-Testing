@@ -86,11 +86,12 @@ nav {
 
 /* ─── MOBILE DRAWER ─── */
 .mob-overlay {
-  display: none; position: fixed; inset: 0; z-index: 400;
+  position: fixed; inset: 0; z-index: 400;
   background: rgba(26,39,68,.45); backdrop-filter: blur(2px);
-  opacity: 0; transition: opacity .3s;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
 }
-.mob-overlay.open { opacity: 1; }
+.mob-overlay.open { opacity: 1; pointer-events: auto; }
 .mob-drawer {
   position: fixed; top: 0; right: 0; bottom: 0; z-index: 500;
   width: min(320px, 88vw);
@@ -561,7 +562,6 @@ footer a { color: var(--pink); text-decoration: none; }
   nav { padding: 12px 20px; }
   .nav-links { display: none; }
   .ham-btn { display: flex; }
-  .mob-overlay { display: block; }
   #hero { grid-template-columns: 1fr; padding: 128px 24px 60px; }
   .hero-right { display: none; }
   section { padding: 64px 24px; }
@@ -1130,6 +1130,7 @@ footer a { color: var(--pink); text-decoration: none; }
   <span class="footer-brand">Truly Pediatric Home Care, LLC</span>
   <span>&#169; 2026 All Rights Reserved &nbsp;&#183;&nbsp; Ohio &nbsp;&#183;&nbsp; <a href="mailto:Trulypediatrichhc@gmail.com">Trulypediatrichhc@gmail.com</a></span>
   <span><a href="tel:9373973600">(937) 397-3600</a></span>
+  <span style="width:100%;text-align:center;font-size:.68rem;opacity:.35;margin-top:4px;">Site by <a href="https://web.barnett-advisory.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Barnett Advisory</a></span>
 </footer>
 
 <script>
