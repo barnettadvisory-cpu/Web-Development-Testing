@@ -26,9 +26,29 @@
 html { scroll-behavior: smooth; }
 body { font-family: 'Nunito', sans-serif; background: var(--white); color: var(--navy); overflow-x: hidden; }
 
+/* ─── EMPLOYEE BAR ─── */
+.emp-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  height: 34px;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 0; padding: 0 48px;
+}
+.emp-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: rgba(255,255,255,.78); font-size: .76rem; font-weight: 600;
+  text-decoration: none; letter-spacing: .02em;
+  padding: 0 14px; height: 100%;
+  transition: color .2s, background .2s;
+  border-right: 1px solid rgba(255,255,255,.1);
+}
+.emp-link:first-child { border-left: 1px solid rgba(255,255,255,.1); }
+.emp-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+.emp-link svg { flex-shrink: 0; }
+
 /* ─── NAV ─── */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: 34px; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 48px;
   background: rgba(255,255,255,0.95);
@@ -51,13 +71,78 @@ nav {
 }
 .nav-cta:hover { background: #a82215 !important; transform: translateY(-1px); }
 
+/* ─── HAMBURGER ─── */
+.ham-btn {
+  display: none; flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 40px; height: 40px; border: none;
+  background: transparent; cursor: pointer; padding: 4px;
+}
+.ham-btn span {
+  display: block; width: 22px; height: 2px;
+  background: var(--navy); border-radius: 2px;
+  transition: transform .3s, opacity .2s, width .2s;
+  transform-origin: center;
+}
+
+/* ─── MOBILE DRAWER ─── */
+.mob-overlay {
+  display: none; position: fixed; inset: 0; z-index: 400;
+  background: rgba(26,39,68,.45); backdrop-filter: blur(2px);
+  opacity: 0; transition: opacity .3s;
+}
+.mob-overlay.open { opacity: 1; }
+.mob-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 500;
+  width: min(320px, 88vw);
+  background: #fff;
+  display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow: -8px 0 40px rgba(26,39,68,.18);
+  overflow-y: auto;
+}
+.mob-drawer.open { transform: translateX(0); }
+.mob-drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--blush-md);
+}
+.mob-drawer-head img { height: 40px; object-fit: contain; }
+.mob-close {
+  width: 36px; height: 36px; border: none; background: var(--blush);
+  border-radius: 50%; cursor: pointer; font-size: 1.1rem; color: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.mob-close:hover { background: var(--blush-md); }
+.mob-links { list-style: none; padding: 12px 0; flex: 1; }
+.mob-links li a {
+  display: block; padding: 13px 24px;
+  text-decoration: none; color: var(--navy); font-size: .95rem; font-weight: 600;
+  transition: background .15s, color .15s;
+}
+.mob-links li a:hover { background: var(--blush); color: var(--red); }
+.mob-links .mob-cta a {
+  margin: 8px 16px; border-radius: 100px; text-align: center;
+  background: var(--red); color: #fff;
+}
+.mob-links .mob-cta a:hover { background: #a82215; }
+.mob-divider {
+  padding: 14px 24px 6px;
+  font-size: .7rem; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(26,39,68,.4);
+  border-top: 1px solid var(--blush-md); margin-top: 6px;
+}
+.mob-links .mob-emp a {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--navy-lt); font-size: .88rem;
+}
+
 /* ─── HERO ─── */
 #hero {
   min-height: 100vh;
   background: var(--blush);
   position: relative; overflow: hidden;
   display: grid; grid-template-columns: 1fr 1fr;
-  align-items: center; padding: 110px 56px 80px;
+  align-items: center; padding: 146px 56px 80px;
   gap: 48px;
 }
 
@@ -472,9 +557,12 @@ footer a { color: var(--pink); text-decoration: none; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 860px) {
+  .emp-bar { padding: 0 20px; }
   nav { padding: 12px 20px; }
   .nav-links { display: none; }
-  #hero { grid-template-columns: 1fr; padding: 96px 24px 60px; }
+  .ham-btn { display: flex; }
+  .mob-overlay { display: block; }
+  #hero { grid-template-columns: 1fr; padding: 128px 24px 60px; }
   .hero-right { display: none; }
   section { padding: 64px 24px; }
   .founder-grid, .community-intro-grid, .hiring-wrap { grid-template-columns: 1fr; gap: 40px; }
@@ -575,6 +663,18 @@ footer a { color: var(--pink); text-decoration: none; }
 </head>
 <body>
 
+<!-- EMPLOYEE BAR -->
+<div class="emp-bar">
+  <a href="https://aloraplus.com" target="_blank" rel="noopener" class="emp-link">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Alora Plus
+  </a>
+  <a href="https://login.flex.paychex.com/login_static/UsernameOnly.html?lang=en&downtime=true" target="_blank" rel="noopener" class="emp-link">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Payroll Portal
+  </a>
+</div>
+
 <!-- NAV -->
 <nav>
   <a href="#hero" class="nav-brand">
@@ -588,7 +688,40 @@ footer a { color: var(--pink); text-decoration: none; }
     <li><a href="#founder">Leadership</a></li>
     <li><a href="#contact" class="nav-cta">Contact Us</a></li>
   </ul>
+  <button class="ham-btn" id="hamBtn" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mob-overlay" id="mobOverlay"></div>
+<div class="mob-drawer" id="mobDrawer" aria-hidden="true">
+  <div class="mob-drawer-head">
+    <img src="https://i.postimg.cc/Tw4Znj48/TRULY-PEDIATRIC-HOME-CARE-(4).png" alt="Truly Pediatric Home Care">
+    <button class="mob-close" id="mobClose" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <ul class="mob-links">
+    <li><a href="#services" class="mob-nav-link">Our Services</a></li>
+    <li><a href="#community" class="mob-nav-link">Our Community</a></li>
+    <li><a href="#testimonials" class="mob-nav-link">Our Families</a></li>
+    <li><a href="#hiring" class="mob-nav-link">Join Us</a></li>
+    <li><a href="#founder" class="mob-nav-link">Leadership</a></li>
+    <li class="mob-cta"><a href="#contact" class="mob-nav-link">Contact Us</a></li>
+    <li class="mob-divider">Employee Portals</li>
+    <li class="mob-emp">
+      <a href="https://aloraplus.com" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Alora Plus
+      </a>
+    </li>
+    <li class="mob-emp">
+      <a href="https://login.flex.paychex.com/login_static/UsernameOnly.html?lang=en&downtime=true" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Payroll Portal
+      </a>
+    </li>
+  </ul>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1000,6 +1133,32 @@ footer a { color: var(--pink); text-decoration: none; }
 </footer>
 
 <script>
+  // Mobile nav drawer
+  const hamBtn     = document.getElementById('hamBtn');
+  const mobDrawer  = document.getElementById('mobDrawer');
+  const mobOverlay = document.getElementById('mobOverlay');
+  const mobClose   = document.getElementById('mobClose');
+
+  function openDrawer() {
+    mobDrawer.classList.add('open');
+    mobOverlay.classList.add('open');
+    mobDrawer.setAttribute('aria-hidden', 'false');
+    hamBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    mobDrawer.classList.remove('open');
+    mobOverlay.classList.remove('open');
+    mobDrawer.setAttribute('aria-hidden', 'true');
+    hamBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  hamBtn.addEventListener('click', openDrawer);
+  mobClose.addEventListener('click', closeDrawer);
+  mobOverlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.mob-nav-link').forEach(a => a.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach((e, i) => {
