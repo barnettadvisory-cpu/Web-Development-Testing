@@ -288,6 +288,10 @@ h2 em { font-style: italic; color: var(--red); }
 }
 
 /* ─── FOUNDER ─── */
+@keyframes founderFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
 #founder { background: var(--off); }
 .founder-grid {
   display: grid; grid-template-columns: 1fr 1.1fr;
@@ -296,35 +300,80 @@ h2 em { font-style: italic; color: var(--red); }
 .founder-img {
   position: relative;
 }
+/* Decorative blob behind the photo */
+.founder-img::before {
+  content: '';
+  position: absolute; inset: -28px -28px -28px -28px;
+  background: radial-gradient(ellipse at 40% 50%, rgba(200,41,26,.1) 0%, transparent 68%);
+  border-radius: 50%; z-index: 0;
+  pointer-events: none;
+}
+/* Decorative dot-grid accent */
+.founder-img::after {
+  content: '';
+  position: absolute; bottom: -14px; left: -22px;
+  width: 120px; height: 120px; z-index: 0;
+  background-image: radial-gradient(circle, rgba(200,41,26,.22) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  pointer-events: none;
+}
 .founder-img-wrap {
+  position: relative; z-index: 1;
   border-radius: 24px; overflow: hidden;
-  box-shadow: 0 20px 56px rgba(200,41,26,.15);
+  box-shadow: 0 24px 64px rgba(200,41,26,.18);
   aspect-ratio: 3/4;
+  animation: founderFloat 6s ease-in-out infinite;
+  /* ring accent */
+  outline: 3px solid rgba(200,41,26,.12);
+  outline-offset: 8px;
 }
 .founder-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .founder-badge {
-  position: absolute; bottom: -20px; right: -20px;
+  position: absolute; bottom: -20px; right: -20px; z-index: 2;
   background: var(--red); color: white;
-  border-radius: 20px; padding: 22px 26px;
-  box-shadow: 0 12px 32px rgba(200,41,26,.35);
-  text-align: center;
+  border-radius: 20px; padding: 18px 22px;
+  box-shadow: 0 12px 32px rgba(200,41,26,.4);
+  text-align: center; min-width: 104px;
 }
 .founder-badge .yrs {
   font-family: 'Playfair Display', serif;
   font-size: 2.4rem; font-weight: 800; line-height: 1;
 }
-.founder-badge .yrs-lbl { font-size: .72rem; font-weight: 700; opacity: .85; letter-spacing: .04em; }
+.founder-badge .yrs-lbl { font-size: .7rem; font-weight: 700; opacity: .85; letter-spacing: .06em; text-transform: uppercase; }
+
+/* Founder stats row */
+.founder-stats {
+  display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0 28px;
+}
+.founder-stat {
+  display: flex; align-items: center; gap: 10px;
+  background: white; border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  font-size: .82rem;
+}
+.founder-stat .fs-icon { font-size: 18px; }
+.founder-stat strong { display: block; font-size: .94rem; color: var(--navy); font-weight: 800; }
+.founder-stat span { color: var(--mid); font-size: .75rem; }
 
 .founder-quote {
+  position: relative;
   background: var(--blush); border-left: 4px solid var(--red);
-  border-radius: 0 12px 12px 0;
-  padding: 20px 24px; margin: 28px 0;
-  font-size: 1.05rem; line-height: 1.75;
+  border-radius: 0 16px 16px 0;
+  padding: 24px 28px 24px 32px; margin: 0 0 28px;
+  font-size: 1.08rem; line-height: 1.8;
   font-style: italic; color: var(--navy-lt);
+}
+.founder-quote::before {
+  content: '\201C';
+  position: absolute; top: -8px; left: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; line-height: 1; color: rgba(200,41,26,.18);
+  font-style: normal; pointer-events: none;
 }
 
 .founder-detail {
-  font-size: .95rem; line-height: 1.8;
+  font-size: .95rem; line-height: 1.85;
   color: var(--mid); margin-bottom: 18px;
 }
 
@@ -369,12 +418,43 @@ h2 em { font-style: italic; color: var(--red); }
   display: grid; grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto;
   gap: 16px;
+  perspective: 1000px;
 }
+/* Override wrapper-level reveal — children handle their own entrance */
+.community-photos.reveal { opacity: 1 !important; transform: none !important; }
+
 .comm-photo {
-  border-radius: 16px; overflow: hidden;
+  position: relative; border-radius: 16px; overflow: hidden;
   box-shadow: 0 8px 24px rgba(0,0,0,.1);
+  cursor: pointer;
+  opacity: 0;
+  transition: box-shadow .4s ease, opacity .7s ease, transform .7s cubic-bezier(.2,0,.2,1);
+  will-change: transform, opacity;
 }
-.comm-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Entrance directions: tall from left, short-top from upper-right, short-bottom from lower-right */
+.comm-photo.tall        { transform: translateX(-44px) scale(.95); }
+.comm-photo:nth-child(2){ transform: translateX(44px) translateY(-20px) scale(.95); }
+.comm-photo:nth-child(3){ transform: translateX(44px) translateY(20px) scale(.95); }
+
+.community-photos.visible .comm-photo        { opacity: 1; transform: none; }
+.community-photos.visible .comm-photo.tall   { transition-delay: 0s; }
+.community-photos.visible .comm-photo:nth-child(2){ transition-delay: .18s; }
+.community-photos.visible .comm-photo:nth-child(3){ transition-delay: .34s; }
+
+.comm-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s ease; }
+.comm-photo:hover img { transform: scale(1.07); }
+
+/* Shimmer / shine overlay on hover */
+.comm-photo::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(130deg, rgba(255,255,255,.18) 0%, transparent 55%);
+  opacity: 0; transition: opacity .4s;
+  pointer-events: none;
+}
+.comm-photo:hover::after { opacity: 1; }
+.comm-photo:hover { box-shadow: 0 22px 56px rgba(200,41,26,.2); }
+
 .comm-photo.tall { grid-row: span 2; }
 .comm-photo.tall img { height: 100%; min-height: 300px; }
 .comm-photo.short img { height: 180px; }
@@ -566,6 +646,13 @@ footer a { color: var(--pink); text-decoration: none; }
   .hero-right { display: none; }
   section { padding: 64px 24px; }
   .founder-grid, .community-intro-grid, .hiring-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .founder-img-wrap { animation: none; }
+  .founder-img::after { display: none; }
+  .founder-stats { gap: 12px; }
+  .founder-stat { padding: 8px 12px; }
+  .founder-badge { bottom: -14px; right: -10px; }
+  .comm-photo.tall img { min-height: 220px; }
+  .comm-photo.short img { height: 140px; }
   .comm-highlights { grid-template-columns: 1fr; }
   footer { padding: 24px; }
   .contact-box { padding: 36px 24px; }
@@ -781,6 +868,20 @@ footer a { color: var(--pink); text-decoration: none; }
     <div class="reveal">
       <p class="section-label">Meet Our Founder</p>
       <h2>Marchelle Hopson,<br><em>RN &amp; Director of Nursing</em></h2>
+      <div class="founder-stats">
+        <div class="founder-stat">
+          <span class="fs-icon">🩺</span>
+          <div><strong>18+ Years</strong><span>Nursing Experience</span></div>
+        </div>
+        <div class="founder-stat">
+          <span class="fs-icon">🏠</span>
+          <div><strong>Est. 2022</strong><span>Founded in Ohio</span></div>
+        </div>
+        <div class="founder-stat">
+          <span class="fs-icon">✅</span>
+          <div><strong>CHAP Accredited</strong><span>National Standard</span></div>
+        </div>
+      </div>
       <blockquote class="founder-quote">
         &#8220;I saw families desperate for skilled home nursing care for their children&#8212;and a system that kept failing them.
         I founded Truly Pediatric to close that gap.&#8221;
@@ -1159,6 +1260,19 @@ footer a { color: var(--pink); text-decoration: none; }
   mobOverlay.addEventListener('click', closeDrawer);
   document.querySelectorAll('.mob-nav-link').forEach(a => a.addEventListener('click', closeDrawer));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+  // Community photos 3D tilt on mouse move
+  document.querySelectorAll('.comm-photo').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width  - .5;
+      const y = (e.clientY - r.top)  / r.height - .5;
+      card.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.03)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
 
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
