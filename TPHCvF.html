@@ -7,6 +7,76 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
 <style>
+/* ─── PASSWORD GATE ─── */
+#pw-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+#pw-gate.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+.pw-logo {
+  height: 72px; object-fit: contain; margin-bottom: 36px;
+  filter: brightness(0) invert(1); opacity: .9;
+}
+.pw-box {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 24px; padding: 44px 44px 40px;
+  width: min(400px, 90vw); text-align: center;
+  backdrop-filter: blur(12px);
+}
+.pw-box h2 {
+  font-family: 'Playfair Display', serif;
+  color: #fff; font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.pw-box p {
+  color: rgba(255,255,255,.5); font-size: .85rem;
+  margin-bottom: 28px; line-height: 1.6;
+}
+.pw-input-wrap { position: relative; margin-bottom: 16px; }
+#pw-input {
+  width: 100%; padding: 14px 48px 14px 18px;
+  border-radius: 12px; border: 1.5px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.08); color: #fff;
+  font-family: 'Nunito', sans-serif; font-size: 1rem;
+  letter-spacing: .25em; text-align: center;
+  outline: none; transition: border-color .2s;
+}
+#pw-input::placeholder { letter-spacing: .08em; color: rgba(255,255,255,.3); }
+#pw-input:focus { border-color: rgba(200,41,26,.7); }
+#pw-toggle {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.4); font-size: 1rem; padding: 4px;
+  transition: color .2s;
+}
+#pw-toggle:hover { color: rgba(255,255,255,.8); }
+#pw-submit {
+  width: 100%; padding: 14px;
+  background: var(--red); color: #fff;
+  border: none; border-radius: 12px; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-size: .95rem; font-weight: 700;
+  transition: background .2s, transform .15s;
+}
+#pw-submit:hover { background: #a82215; transform: translateY(-1px); }
+#pw-error {
+  color: rgba(255,120,100,.85); font-size: .8rem;
+  margin-top: 12px; min-height: 18px;
+  opacity: 0; transition: opacity .2s;
+}
+#pw-error.show { opacity: 1; }
+.pw-shake { animation: pwShake .35s ease; }
+@keyframes pwShake {
+  0%,100%{ transform: translateX(0); }
+  20%    { transform: translateX(-8px); }
+  40%    { transform: translateX(8px); }
+  60%    { transform: translateX(-5px); }
+  80%    { transform: translateX(5px); }
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -747,8 +817,29 @@ footer a { color: var(--pink); text-decoration: none; }
   .cred-bar img { height: 38px; }
 }
 </style>
+<script>
+  // If already authenticated this session, mark body so gate fades immediately
+  if (sessionStorage.getItem('tphc_auth') === '1') {
+    document.documentElement.classList.add('pre-auth');
+  }
+</script>
 </head>
 <body>
+
+<!-- PASSWORD GATE -->
+<div id="pw-gate">
+  <img class="pw-logo" src="https://i.postimg.cc/Tw4Znj48/TRULY-PEDIATRIC-HOME-CARE-(4).png" alt="Truly Pediatric Home Care">
+  <div class="pw-box">
+    <h2>Client Preview</h2>
+    <p>This site is password protected.<br>Enter your access code to continue.</p>
+    <div class="pw-input-wrap">
+      <input id="pw-input" type="password" placeholder="Enter passcode" autocomplete="off" maxlength="20">
+      <button id="pw-toggle" aria-label="Show/hide passcode" tabindex="-1">&#128065;</button>
+    </div>
+    <button id="pw-submit">View Site</button>
+    <p id="pw-error">Incorrect passcode. Please try again.</p>
+  </div>
+</div>
 
 <!-- EMPLOYEE BAR -->
 <div class="emp-bar">
@@ -1235,6 +1326,45 @@ footer a { color: var(--pink); text-decoration: none; }
 </footer>
 
 <script>
+  // Password gate
+  (function() {
+    const gate    = document.getElementById('pw-gate');
+    const input   = document.getElementById('pw-input');
+    const submit  = document.getElementById('pw-submit');
+    const toggle  = document.getElementById('pw-toggle');
+    const errMsg  = document.getElementById('pw-error');
+    const PASS    = '2020';
+
+    function unlock() {
+      sessionStorage.setItem('tphc_auth', '1');
+      gate.classList.add('unlocked');
+    }
+    function fail() {
+      errMsg.classList.add('show');
+      input.classList.add('pw-shake');
+      input.value = '';
+      input.focus();
+      setTimeout(() => input.classList.remove('pw-shake'), 400);
+    }
+    function attempt() {
+      if (input.value === PASS) unlock(); else fail();
+    }
+
+    // Already authenticated this session — dismiss instantly
+    if (sessionStorage.getItem('tphc_auth') === '1') {
+      gate.classList.add('unlocked');
+      gate.style.transition = 'none';
+    }
+
+    submit.addEventListener('click', attempt);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+    input.addEventListener('input', () => errMsg.classList.remove('show'));
+    toggle.addEventListener('click', () => {
+      input.type = input.type === 'password' ? 'text' : 'password';
+      toggle.textContent = input.type === 'password' ? '👁' : '🙈';
+    });
+  })();
+
   // Mobile nav drawer
   const hamBtn     = document.getElementById('hamBtn');
   const mobDrawer  = document.getElementById('mobDrawer');
