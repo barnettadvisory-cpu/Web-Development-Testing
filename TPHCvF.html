@@ -818,56 +818,78 @@ footer a { color: var(--pink); text-decoration: none; }
 }
 
 /* ─── TRANSPORT ANNOUNCEMENT BANNER ─── */
+/* ─── TRANSPORT POPUP BANNER (bottom-right) ─── */
 #transport-banner {
-  position: fixed; top: 34px; left: 0; right: 0; z-index: 250;
-  background: linear-gradient(90deg, #1A2744 0%, #2a3d6e 50%, #1A2744 100%);
-  color: white; padding: 9px 56px;
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; font-size: .82rem; font-weight: 600;
-  text-align: center; flex-wrap: wrap;
-  transition: transform .35s ease, opacity .35s ease;
-  border-bottom: 1px solid rgba(200,41,26,.3);
+  position: fixed; bottom: 28px; right: 28px; z-index: 600;
+  background: var(--navy);
+  color: white;
+  border-radius: 20px;
+  padding: 22px 24px 20px;
+  width: min(340px, calc(100vw - 40px));
+  box-shadow: 0 20px 60px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08);
+  transition: transform .45s cubic-bezier(.2,0,.2,1), opacity .45s ease;
+  transform: translateY(0); opacity: 1;
 }
-#transport-banner.tb-hidden { transform: translateY(-110%); opacity: 0; pointer-events: none; }
+#transport-banner.tb-hidden {
+  transform: translateY(calc(100% + 40px)); opacity: 0; pointer-events: none;
+}
+#transport-banner .tb-popup-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
 #transport-banner .tb-badge {
   background: var(--red); color: white;
-  padding: 3px 11px; border-radius: 100px;
-  font-size: .7rem; font-weight: 800; letter-spacing: .07em;
-  text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
+  padding: 4px 12px; border-radius: 100px;
+  font-size: .68rem; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase;
 }
-#transport-banner a.tb-link {
-  color: #f2b8b3; text-decoration: none; font-weight: 700;
-  white-space: nowrap; border-bottom: 1px solid rgba(242,184,179,.4);
-  transition: color .2s, border-color .2s;
-}
-#transport-banner a.tb-link:hover { color: white; border-color: white; }
 #transport-banner .tb-close {
-  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; color: rgba(255,255,255,.45);
-  cursor: pointer; font-size: 1rem; line-height: 1;
-  padding: 6px 8px; transition: color .2s;
+  background: rgba(255,255,255,.1); border: none; color: rgba(255,255,255,.6);
+  cursor: pointer; font-size: .8rem; line-height: 1;
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, color .2s; flex-shrink: 0;
 }
-#transport-banner .tb-close:hover { color: white; }
-body.has-banner nav { top: 74px; }
-body.has-banner .emp-bar { top: 0; }
+#transport-banner .tb-close:hover { background: rgba(255,255,255,.2); color: white; }
+#transport-banner .tb-popup-logo {
+  height: 36px; object-fit: contain; display: block; margin-bottom: 10px;
+}
+#transport-banner .tb-body {
+  font-size: .84rem; line-height: 1.6; color: rgba(255,255,255,.65);
+  margin-bottom: 16px;
+}
+#transport-banner .tb-body strong { color: white; }
+#transport-banner a.tb-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--red); color: white;
+  padding: 10px 20px; border-radius: 100px;
+  font-size: .84rem; font-weight: 700; text-decoration: none;
+  transition: background .2s, transform .15s;
+}
+#transport-banner a.tb-link:hover { background: #a82215; transform: translateY(-1px); }
+@media (max-width: 480px) {
+  #transport-banner { bottom: 16px; right: 16px; left: 16px; width: auto; }
+}
+/* Remove legacy has-banner nav shifts (banner is now a bottom popup) */
+body.has-banner nav { top: 34px; }
 
 /* ─── TRULY TRANSPORT COMING SOON SECTION ─── */
 #transport {
-  background: linear-gradient(145deg, #111e3a 0%, #1A2744 45%, #22335c 100%);
+  background: linear-gradient(145deg, #1e3060 0%, #253a72 50%, #1e3060 100%);
   padding: 100px 56px; position: relative; overflow: hidden;
 }
 #transport::before {
   content: '';
   position: absolute; top: -180px; right: -180px;
   width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(200,41,26,.13) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(200,41,26,.2) 0%, transparent 65%);
   border-radius: 50%; pointer-events: none;
 }
 #transport::after {
   content: '';
   position: absolute; bottom: -120px; left: -120px;
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(200,41,26,.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(200,41,26,.14) 0%, transparent 65%);
   border-radius: 50%; pointer-events: none;
 }
 .transport-inner {
@@ -880,8 +902,8 @@ body.has-banner .emp-bar { top: 0; }
   margin-bottom: 28px;
 }
 .transport-logo {
-  height: 68px; object-fit: contain;
-  filter: brightness(0) invert(1); opacity: .92;
+  height: 80px; object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,.35));
 }
 .transport-coming-pill {
   display: inline-flex; align-items: center; gap: 9px;
@@ -903,7 +925,7 @@ body.has-banner .emp-bar { top: 0; }
 }
 #transport h2 em { color: var(--pink); }
 #transport .section-intro {
-  color: rgba(255,255,255,.55); max-width: 560px; margin: 0 auto;
+  color: rgba(255,255,255,.75); max-width: 560px; margin: 0 auto;
 }
 .transport-grid {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -930,7 +952,7 @@ body.has-banner .emp-bar { top: 0; }
   font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 16px;
 }
 .transport-content > p {
-  color: rgba(255,255,255,.6); line-height: 1.82; font-size: .95rem; margin-bottom: 28px;
+  color: rgba(255,255,255,.78); line-height: 1.82; font-size: .95rem; margin-bottom: 28px;
 }
 .transport-features {
   list-style: none; margin-bottom: 32px;
@@ -938,7 +960,7 @@ body.has-banner .emp-bar { top: 0; }
 }
 .transport-features li {
   display: flex; align-items: center; gap: 13px;
-  font-size: .9rem; color: rgba(255,255,255,.75); font-weight: 600;
+  font-size: .9rem; color: rgba(255,255,255,.9); font-weight: 600;
 }
 .transport-features li .tf-icon {
   width: 34px; height: 34px; border-radius: 50%;
@@ -968,7 +990,7 @@ body.has-banner .emp-bar { top: 0; }
   font-family: 'Playfair Display', serif;
   color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 10px;
 }
-.transport-notify p { color: rgba(255,255,255,.5); font-size: .88rem; margin-bottom: 26px; }
+.transport-notify p { color: rgba(255,255,255,.7); font-size: .88rem; margin-bottom: 26px; }
 .transport-notify-form {
   display: flex; gap: 12px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; justify-content: center;
 }
@@ -1027,7 +1049,6 @@ body.has-banner .emp-bar { top: 0; }
   .transport-notify { padding: 32px 22px; }
   .transport-notify-form { flex-direction: column; align-items: stretch; }
   .transport-notify-form input { min-width: 0; }
-  body.has-banner nav { top: 108px; }
 }
 </style>
 <script>
@@ -1085,13 +1106,15 @@ body.has-banner .emp-bar { top: 0; }
   </button>
 </nav>
 
-<!-- TRANSPORT ANNOUNCEMENT BANNER -->
-<div id="transport-banner">
-  <span class="tb-badge">Coming 2026</span>
-  <span>Introducing <strong>Truly Transport</strong> &mdash; dedicated pediatric medical transportation, launching this year.&nbsp;
-    <a href="#transport" class="tb-link">Learn More ↓</a>
-  </span>
-  <button class="tb-close" id="tbClose" aria-label="Dismiss announcement">&#x2715;</button>
+<!-- TRANSPORT POPUP BANNER -->
+<div id="transport-banner" role="complementary" aria-label="Truly Transport announcement">
+  <div class="tb-popup-top">
+    <span class="tb-badge">Coming 2026</span>
+    <button class="tb-close" id="tbClose" aria-label="Dismiss announcement">&#x2715;</button>
+  </div>
+  <img class="tb-popup-logo" src="https://images.barnett-advisory.com/Client%20Images/TPHC/Truly%20Transport%20Logo.png" alt="Truly Transport">
+  <p class="tb-body"><strong>Truly Transport</strong> is on the way &mdash; dedicated pediatric medical transportation, nurse-accompanied and built for Ohio families.</p>
+  <a href="#transport" class="tb-link">See What&rsquo;s Coming ↓</a>
 </div>
 
 <!-- MOBILE DRAWER -->
@@ -1735,23 +1758,35 @@ body.has-banner .emp-bar { top: 0; }
   }, { threshold: 0.1 });
   reveals.forEach(el => obs.observe(el));
 
-  // ── Transport Announcement Banner ──
+  // ── Transport Popup Banner ──
   (function() {
-    const banner  = document.getElementById('transport-banner');
+    const banner   = document.getElementById('transport-banner');
     const closeBtn = document.getElementById('tbClose');
     if (!banner) return;
 
-    // Dismiss if already closed this session
+    // Hide instantly if already dismissed this session
     if (sessionStorage.getItem('tb_dismissed') === '1') {
       banner.classList.add('tb-hidden');
-    } else {
-      document.body.classList.add('has-banner');
+      return;
     }
+
+    // Slide in after a short delay for a polished entrance
+    banner.classList.add('tb-hidden');
+    setTimeout(function() {
+      banner.classList.remove('tb-hidden');
+    }, 1800);
 
     closeBtn.addEventListener('click', function() {
       banner.classList.add('tb-hidden');
-      document.body.classList.remove('has-banner');
       sessionStorage.setItem('tb_dismissed', '1');
+    });
+
+    // Also dismiss when user clicks the learn more link
+    banner.querySelector('a.tb-link').addEventListener('click', function() {
+      setTimeout(function() {
+        banner.classList.add('tb-hidden');
+        sessionStorage.setItem('tb_dismissed', '1');
+      }, 600);
     });
   })();
 
